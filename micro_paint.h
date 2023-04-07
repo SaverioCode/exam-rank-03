@@ -26,7 +26,5 @@ typedef struct s_dflt
 	char	**paint;
 }	t_dflt;
 
-void	ft_free(t_dflt *dflt);
-
 #endif
 

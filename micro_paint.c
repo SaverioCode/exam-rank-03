@@ -1,6 +1,19 @@
 
 #include "micro_paint.h"
 
+void	ft_free_paint(t_dflt *dflt)
+{
+	int	y;
+
+	y = 0;
+	while (dflt->paint[y])
+	{
+		free(dflt->paint[y]);
+		y++;
+	}
+	free(dflt->paint);
+}
+
 void	ft_allocate_print(t_dflt *dflt)
 {
 	int	y;
@@ -15,20 +28,22 @@ void	ft_allocate_print(t_dflt *dflt)
 	}
 }
 
-void	ft_store_paint(t_dflt *dflt, t_paint *paint, int flag)
+void	ft_update_paint(t_dflt *dflt, t_paint *paint)
 {
 	int	x;
 	int	y;
 
+	if ((int)paint->w <= 0 || (int)paint->h <= 0)
+		return ;
+	paint->w += paint->x;
+	paint->h += paint->y;
 	y = 0;
-//	printf("paint->x: %f | paint->y: %f\n", paint->x, paint->y);////
-//	printf("paint->w: %f | paint->h: %f\n", paint->w, paint->h);////
 	while (dflt->paint[y])
 	{
 		x = 0;
 		while (dflt->paint[y][x])
 		{
-			if (flag == 1 && y - 1 >= paint->y && y + 1 <= paint->h)
+			if (paint->type == 114 && y - 1 >= paint->y && y + 1 <= paint->h)
 			{
 				if ((x - 1 < paint->x && x >= paint->x) ||
 					(x <= paint->w && x + 1 > paint->w ))
@@ -42,21 +57,6 @@ void	ft_store_paint(t_dflt *dflt, t_paint *paint, int flag)
 		}
 		y++;
 	}
-}
-
-void	ft_update_paint(t_dflt *dflt, t_paint *paint)
-{
-	if ((int)paint->w <= 0 || (int)paint->h <= 0)
-		return ;
-	paint->w += paint->x;
-	paint->h += paint->y;
-	if (paint->w < 0 || paint->h < 0 ||\
-		   	paint->x > dflt->w || paint->y >dflt->h)
-		return ;
-	if (paint->type == 114)
-		ft_store_paint(dflt, paint, 1);
-	else if (paint->type == 82)
-		ft_store_paint(dflt, paint, 0);
 }
 
 void	ft_print_paint(t_dflt *dflt)
@@ -111,6 +111,7 @@ int	main(int ac, char **av)
 		ft_update_paint(&dflt, &paint);
 	}
 	ft_print_paint(&dflt);
-	ft_free(&dflt);
+	ft_free_paint(&dflt);
 	return (0);
 }
+

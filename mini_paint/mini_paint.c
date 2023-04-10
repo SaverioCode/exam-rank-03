@@ -14,6 +14,7 @@ void	ft_allocate_print(t_dflt *dflt)
 		y++;
 	}
 }
+
 float	distance(t_paint *paint, int x, int y)
 {
 	float	f;
